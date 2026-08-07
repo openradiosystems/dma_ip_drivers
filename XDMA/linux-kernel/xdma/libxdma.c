@@ -1573,7 +1573,7 @@ static int engine_init(struct xdma_dev *xdev, enum dma_data_direction dir, int c
 		XDMA_MAX_ADJ_BLOCK_LEN);
 	dbg_init("engine %p name %s irq_bitmask=0x%08x\n", engine, engine->name,
 		 (unsigned int) (int)engine->irq_bitmask);
-
+	dbg_init("MRRS: %u; Adjacent descriptor block length %u (limited to 64)\n", engine->xdev->max_read_request_size, engine->adj_block_len);
 
 
 	if (dir == DMA_TO_DEVICE)
@@ -1911,7 +1911,7 @@ static int xdma_prepare_transfer(struct xdma_engine *engine)
 	}
 	/*the functions allocate small chunks of memory. If that fails, there is 
 	no point trying, hence __NO_RETRY*/
-	#if LINUX_VERSION_CHECK(5,15,0)
+	#if LINUX_VERSION_CHECK(5,15,0) || (defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(9,1))
 	rv=sg_alloc_table_from_pages_segment(&(transfer->sgt), transfer->pages, 
 			transfer->num_pages, offset_in_page(transfer_params->buf),
 			transfer_params->length, XDMA_DESC_BLEN_MAX, GFP_KERNEL|__GFP_NORETRY);
@@ -2010,7 +2010,7 @@ static long xdma_wait_for_transfer(struct xdma_engine *engine)
 				
 		}
 	/*catch signals*/
-	} while(!signal_pending(current) && !dma_device_test_offline(engine->xdev);
+	} while(!signal_pending(current) && !xdma_device_test_offline(engine->xdev));
 	/*like wait for completion*/
 	return -ERESTARTSYS;
 	

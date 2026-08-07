@@ -37,7 +37,7 @@ endif
 
 topdir := $(shell cd $(src)/.. && pwd)
 
-TARGET_MODULE:=xdma-chr
+TARGET_MODULE:=xdma
 
 EXTRA_CFLAGS := -I$(topdir)/include $(XVC_FLAGS)
 ifeq ($(DEBUG),1)
@@ -76,7 +76,7 @@ ifneq ($(DEVICE_ID),)
 endif
 
 #EXTRA_CFLAGS += -DINTERNAL_TESTING
-
+ccflags-y := $(EXTRA_CFLAGS)
 ifneq ($(KERNELRELEASE),)
 	$(TARGET_MODULE)-objs := libxdma.o xdma_cdev.o cdev_ctrl.o cdev_events.o cdev_sgdma.o cdev_xvc.o cdev_bypass.o xdma_mod.o 
 	obj-m := $(TARGET_MODULE).o
