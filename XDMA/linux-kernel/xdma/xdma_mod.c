@@ -47,6 +47,7 @@ static int xpdev_cnt;
 static const struct pci_device_id pci_ids[] = {
 	
 	{ PCI_DEVICE(0x10ee, 0x8034), },
+	{ PCI_DEVICE(0x10ee, 0x9011), },
 	{ PCI_DEVICE(0x10ee, 0x9032), },
 	{ PCI_DEVICE(0x10ee, 0x9034), },
 	{ PCI_DEVICE(0x10ee, 0x9038), },
