@@ -462,7 +462,6 @@ struct xdma_transfer_params {
 #define XFER_FLAG_SGTABLE_MAPPED (1U<<3)
 #define XFER_FLAG_DMA_RECORD_ALLOC (1U<<4)
 #define XFER_FLAG_DESC_DMA_ALLOC (1U<<5)
-#define XFER_FLAG_DESC_FIFO_RESERVED (1U<<6)
 
 /* holds data necessary to perform a transfer*/
 struct xdma_transfer {
@@ -560,7 +559,6 @@ struct xdma_dev {
 	
 	const unsigned int max_read_request_size;
 	const unsigned int datapath_width;
-	atomic_t desc_fifo_capacity;
 
 	/* Interrupt management */
 	int irq_count;		/* interrupt counter */
@@ -595,7 +593,6 @@ void xdma_device_offline(struct pci_dev *pdev, void *dev_handle);
 void xdma_device_online(struct pci_dev *pdev, void *dev_handle);
 ssize_t xdma_xfer_submit(struct xdma_engine *engine);
 struct xdma_transfer *engine_cyclic_stop(struct xdma_engine *engine);
-void enable_perf(struct xdma_engine *engine, bool enable);
 int get_perf_stats(struct xdma_engine *engine, struct xdma_performance_ioctl *__user user_perf_res);
 
 void engine_addrmode_set(struct xdma_engine *engine, bool set);

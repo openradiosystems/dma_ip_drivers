@@ -83,17 +83,8 @@ static ssize_t char_sgdma_read(struct file *filp, char __user *buf,
 
 static int ioctl_do_perf_test(struct xdma_engine *engine, unsigned long arg)
 {
-	bool enable;
-	int rv=get_user(enable, (bool __user *) arg);
-	if (rv<0)
-		return rv;
-	xdma_debug_assert_ptr(engine);
-	if (test_and_set_bit_lock(XENGINE_BUSY_BIT, &(engine->flags))) 		
-		return -EBUSY;
-	enable_perf(engine, enable);
-
-	clear_bit_unlock(XENGINE_BUSY_BIT, &(engine->flags));
-	return rv;
+	pr_warn("XDMA_IOCTL_PERF_TEST operation has been deprecated and has no effect\n");
+	return 0;
 }
 
 
@@ -135,7 +126,7 @@ static int ioctl_do_align_get(struct xdma_engine *engine, unsigned long arg)
 	xdma_debug_assert_ptr(engine);
 
 	dbg_perf("XDMA_IOCTL_ALIGN_GET\n");
-	return put_user(engine->addr_align, (int __user *)arg);
+	return put_user(engine->xdev->datapath_width, (int __user *)arg);
 }
 
 
